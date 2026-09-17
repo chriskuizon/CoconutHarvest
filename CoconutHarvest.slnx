@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CoconutHarvest.Contracts/CoconutHarvest.Contracts.csproj" />
+    <Project Path="src/CoconutHarvest.Perception/CoconutHarvest.Perception.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CoconutHarvest.Tests/CoconutHarvest.Tests.csproj" />
+  </Folder>
+</Solution>

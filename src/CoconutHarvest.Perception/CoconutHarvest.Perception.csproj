@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>CoconutHarvest.Perception</RootNamespace>
+    <UserSecretsId>coconut-perception</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CoconutHarvest.Contracts\CoconutHarvest.Contracts.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+    <PackageReference Include="NetMQ" />
+    <PackageReference Include="OpenCvSharp4" />
+    <PackageReference Include="System.Security.Cryptography.Xml" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" />
+    <!-- Pick ONE runtime. Windows dev box: -->
+    <PackageReference Include="OpenCvSharp4.runtime.win" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
+    <!-- Jetson / Linux ARM64: replace with OpenCvSharp4.runtime.linux-arm (or build OpenCvSharpExtern from source). -->
+    <!-- CPU inference for dev; swap to Microsoft.ML.OnnxRuntime.Gpu on the Jetson. -->
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
