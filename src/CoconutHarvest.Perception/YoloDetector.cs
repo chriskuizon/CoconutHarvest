@@ -99,20 +99,34 @@ public sealed class YoloDetector : IDisposable
         return PostProcess(output, frameBgr.Width, frameBgr.Height);
     }
 
-    private void Preprocess(Mat boxed)
+    private void Preprocess(Mat boxed) => FillInput(boxed, _input.Buffer.Span, _size);
+
+    /// <summary>
+    /// Letterboxed BGR uint8 image -> RGB float [0,1] in CHW order, written straight into the tensor's
+    /// flat buffer. One pass over the pixel bytes: no per-frame pixel array and no 4-D indexer, which made
+    /// the previous version ~55 ms of a ~99 ms frame at 640 px.
+    /// </summary>
+    public static void FillInput(Mat boxed, Span<float> chw, int size)
     {
-        // BGR uint8 -> RGB float [0,1], CHW
-        boxed.GetArray(out Vec3b[] pixels);
-        var s = _size;
-        for (var i = 0; i < pixels.Length; i++)
+        if (boxed.Type() != MatType.CV_8UC3 || boxed.Width != size || boxed.Height != size || !boxed.IsContinuous())
         {
-            var y = i / s;
-            var x = i % s;
-            _input[0, 0, y, x] = pixels[i].Item2 / 255f; // R
-            _input[0, 1, y, x] = pixels[i].Item1 / 255f; // G
-            _input[0, 2, y, x] = pixels[i].Item0 / 255f; // B
+            throw new ArgumentException($"Expected a continuous {size}x{size} CV_8UC3 image.", nameof(boxed));
+        }
+        var plane = size * size;
+        if (chw.Length < 3 * plane) throw new ArgumentException("Tensor buffer too small.", nameof(chw));
+
+        var bgr = boxed.AsSpan<byte>();
+        var r = chw[..plane];
+        var g = chw.Slice(plane, plane);
+        var b = chw.Slice(2 * plane, plane);
+        for (int i = 0, p = 0; i < plane; i++, p += 3)
+        {
+            b[i] = bgr[p] / 255f;
+            g[i] = bgr[p + 1] / 255f;
+            r[i] = bgr[p + 2] / 255f;
         }
     }
+
 
     private List<RawDetection> PostProcess(Tensor<float> output, int imgW, int imgH)
     {
