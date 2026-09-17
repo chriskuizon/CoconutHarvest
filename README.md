@@ -13,6 +13,12 @@ CoconutHarvest.slnx
 
 This repository contains the perception side only. Flight control and mission logic are not included.
 
+## Demo
+
+A narrated walkthrough of the project:
+
+https://github.com/user-attachments/assets/9a3685f6-76ec-430c-ba36-9c20e7118a56
+
 ## Pipeline
 
 ```
