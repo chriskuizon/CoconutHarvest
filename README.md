@@ -19,6 +19,12 @@ A narrated walkthrough of the project:
 
 https://github.com/user-attachments/assets/9a3685f6-76ec-430c-ba36-9c20e7118a56
 
+A drone animation harvesting coconut
+
+https://github.com/user-attachments/assets/02dea493-cfc3-49c5-8abb-c2e710f6e98f
+
+https://github.com/user-attachments/assets/cb995e2c-86dc-4a10-88a0-c861da3f2956
+
 ## Pipeline
 
 ```
